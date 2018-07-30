@@ -2188,6 +2188,8 @@ var Tippy = function () {
         return data.popper === popper;
       });
 
+      if (!data) return;
+
       var _getInnerElements = (0, _getInnerElements5.default)(popper),
           tooltip = _getInnerElements.tooltip,
           circle = _getInnerElements.circle,
@@ -2201,7 +2203,7 @@ var Tippy = function () {
       this.callbacks.show.call(popper);
 
       // Custom react
-      if (data && data.settings && data.settings.open === false) {
+      if (data.settings && data.settings.open === false) {
         return;
       }
 
