@@ -2305,6 +2305,8 @@ var Tippy = function () {
         return data.popper === popper;
       });
 
+      if (!data) return;
+
       var _getInnerElements2 = (0, _getInnerElements5.default)(popper),
           tooltip = _getInnerElements2.tooltip,
           circle = _getInnerElements2.circle,
