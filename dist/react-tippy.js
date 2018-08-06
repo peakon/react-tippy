@@ -977,6 +977,7 @@ function bindEventListeners() {
       var ref = (0, _find2.default)(_globals.Store, function (ref) {
         return ref.popper === popper;
       });
+      if (!ref) return;
       var interactive = ref.settings.interactive;
 
       if (interactive) return;
@@ -986,6 +987,7 @@ function bindEventListeners() {
       var _ref = (0, _find2.default)(_globals.Store, function (ref) {
         return ref.el === el;
       });
+      if (!_ref) return;
       var _ref$settings = _ref.settings,
           hideOnClick = _ref$settings.hideOnClick,
           multiple = _ref$settings.multiple,
