@@ -257,23 +257,24 @@ exports.default = closest;
 var _matches = __webpack_require__(8);
 
 /**
-* Ponyfill to get the closest parent element
-* @param {Element} element - child of parent to be returned
-* @param {String} parentSelector - selector to match the parent if found
-* @return {Element}
-*/
-function closest(element, parentSelector) {
-  var _closest = Element.prototype.closest || function (selector) {
-    var el = this;
-    while (el) {
-      if (_matches.matches.call(el, selector)) {
-        return el;
-      }
-      el = el.parentElement;
-    }
-  };
+ * Ponyfill to get the closest parent element
+ * @param {Element} element - child of parent to be returned
+ * @param {String} parentSelector - selector to match the parent if found
+ * @return {Element}
+ */
+function closest(el, selector) {
+  if (Element.prototype.closest) {
+    return el.closest(selector);
+  }
 
-  return _closest.call(element, parentSelector);
+  while (el) {
+    if (_matches.matches.call(el, selector)) {
+      return el;
+    }
+    el = el.parentElement;
+  }
+
+  return el;
 }
 
 /***/ }),
