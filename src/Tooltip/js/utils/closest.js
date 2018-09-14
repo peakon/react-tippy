@@ -7,6 +7,10 @@ import { matches } from './matches'
 * @return {Element}
 */
 export default function closest(element, parentSelector) {
+  if (!element) {
+      return null
+  }
+
   const _closest = Element.prototype.closest || function(selector) {
     let el = this
     while (el) {
