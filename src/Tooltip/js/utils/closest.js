@@ -1,25 +1,37 @@
-import { matches } from './matches'
-
 /**
-* Ponyfill to get the closest parent element
-* @param {Element} element - child of parent to be returned
-* @param {String} parentSelector - selector to match the parent if found
-* @return {Element}
-*/
-export default function closest(element, parentSelector) {
-  if (!element) {
-      return null
-  }
+ * Ponyfill to get the closest parent element
+ * @param {Element} el - child of parent to be returned
+ * @param {String} selector - selector to match the parent if found
+ * @return {Element}
+ */
+export default function closest(el, selector) {
+  var matchesFn;
 
-  const _closest = Element.prototype.closest || function(selector) {
-    let el = this
-    while (el) {
-      if (matches.call(el, selector)) {
-        return el
-      }
-      el = el.parentElement
+  // find vendor prefix
+  [
+    'matches',
+    'webkitMatchesSelector',
+    'mozMatchesSelector',
+    'msMatchesSelector',
+    'oMatchesSelector'
+  ].some(function(fn) {
+    if (typeof document.body[fn] == 'function') {
+      matchesFn = fn;
+      return true;
     }
+    return false;
+  });
+
+  var parent;
+
+  // traverse parents
+  while (el) {
+    parent = el.parentElement;
+    if (parent && parent[matchesFn](selector)) {
+      return parent;
+    }
+    el = parent;
   }
 
-  return _closest.call(element, parentSelector)
+  return null;
 }

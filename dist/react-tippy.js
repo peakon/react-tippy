@@ -253,31 +253,36 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.default = closest;
-
-var _matches = __webpack_require__(8);
-
 /**
-* Ponyfill to get the closest parent element
-* @param {Element} element - child of parent to be returned
-* @param {String} parentSelector - selector to match the parent if found
-* @return {Element}
-*/
-function closest(element, parentSelector) {
-  if (!element) {
-    return null;
+ * Ponyfill to get the closest parent element
+ * @param {Element} el - child of parent to be returned
+ * @param {String} selector - selector to match the parent if found
+ * @return {Element}
+ */
+function closest(el, selector) {
+  var matchesFn;
+
+  // find vendor prefix
+  ['matches', 'webkitMatchesSelector', 'mozMatchesSelector', 'msMatchesSelector', 'oMatchesSelector'].some(function (fn) {
+    if (typeof document.body[fn] == 'function') {
+      matchesFn = fn;
+      return true;
+    }
+    return false;
+  });
+
+  var parent;
+
+  // traverse parents
+  while (el) {
+    parent = el.parentElement;
+    if (parent && parent[matchesFn](selector)) {
+      return parent;
+    }
+    el = parent;
   }
 
-  var _closest = Element.prototype.closest || function (selector) {
-    var el = this;
-    while (el) {
-      if (_matches.matches.call(el, selector)) {
-        return el;
-      }
-      el = el.parentElement;
-    }
-  };
-
-  return _closest.call(element, parentSelector);
+  return null;
 }
 
 /***/ }),
@@ -350,25 +355,6 @@ function isVisible(popper) {
 
 /***/ }),
 /* 8 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-function defaultMatchSelector(s) {
-  var matches = (this.document || this.ownerDocument).querySelectorAll(s),
-      i = matches.length;
-  while (--i >= 0 && matches.item(i) !== this) {}
-  return i > -1;
-}
-
-var matches = exports.matches = typeof window === 'undefined' ? defaultMatchSelector : Element.prototype.matches || Element.prototype.matchesSelector || Element.prototype.webkitMatchesSelector || Element.prototype.mozMatchesSelector || Element.prototype.msMatchesSelector || defaultMatchSelector;
-
-/***/ }),
-/* 9 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -688,7 +674,7 @@ Tooltip.defaultProps = defaultProps;
 exports.default = Tooltip;
 
 /***/ }),
-/* 10 */
+/* 9 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -729,6 +715,7 @@ function followCursorHandler(e) {
   var refData = (0, _find2.default)(_globals.Store, function (refData) {
     return refData.el === _this;
   });
+  if (!refData) return;
 
   var popper = refData.popper,
       offset = refData.settings.offset;
@@ -784,7 +771,7 @@ function followCursorHandler(e) {
 }
 
 /***/ }),
-/* 11 */
+/* 10 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -806,6 +793,25 @@ var _globals = __webpack_require__(0);
 function getOffsetDistanceInPx(distance) {
   return -(distance - _globals.Defaults.distance) + 'px';
 }
+
+/***/ }),
+/* 11 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+function defaultMatchSelector(s) {
+  var matches = (this.document || this.ownerDocument).querySelectorAll(s),
+      i = matches.length;
+  while (--i >= 0 && matches.item(i) !== this) {}
+  return i > -1;
+}
+
+var matches = exports.matches = typeof window === 'undefined' ? defaultMatchSelector : Element.prototype.matches || Element.prototype.matchesSelector || Element.prototype.webkitMatchesSelector || Element.prototype.mozMatchesSelector || Element.prototype.msMatchesSelector || defaultMatchSelector;
 
 /***/ }),
 /* 12 */
@@ -855,7 +861,7 @@ var _react = __webpack_require__(13);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _component = __webpack_require__(9);
+var _component = __webpack_require__(8);
 
 var _component2 = _interopRequireDefault(_component);
 
@@ -890,7 +896,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.withTooltip = exports.Tooltip = undefined;
 
-var _component = __webpack_require__(9);
+var _component = __webpack_require__(8);
 
 var _component2 = _interopRequireDefault(_component);
 
@@ -929,7 +935,7 @@ var _find = __webpack_require__(2);
 
 var _find2 = _interopRequireDefault(_find);
 
-var _matches = __webpack_require__(8);
+var _matches = __webpack_require__(11);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -982,6 +988,7 @@ function bindEventListeners() {
         return ref.popper === popper;
       });
       if (!ref) return;
+
       var interactive = ref.settings.interactive;
 
       if (interactive) return;
@@ -992,6 +999,7 @@ function bindEventListeners() {
         return ref.el === el;
       });
       if (!_ref) return;
+
       var _ref$settings = _ref.settings,
           hideOnClick = _ref$settings.hideOnClick,
           multiple = _ref$settings.multiple,
@@ -1050,7 +1058,7 @@ var _getCorePlacement = __webpack_require__(3);
 
 var _getCorePlacement2 = _interopRequireDefault(_getCorePlacement);
 
-var _getOffsetDistanceInPx = __webpack_require__(11);
+var _getOffsetDistanceInPx = __webpack_require__(10);
 
 var _getOffsetDistanceInPx2 = _interopRequireDefault(_getOffsetDistanceInPx);
 
@@ -1185,7 +1193,7 @@ var _getInnerElements2 = __webpack_require__(6);
 
 var _getInnerElements3 = _interopRequireDefault(_getInnerElements2);
 
-var _getOffsetDistanceInPx = __webpack_require__(11);
+var _getOffsetDistanceInPx = __webpack_require__(10);
 
 var _getOffsetDistanceInPx2 = _interopRequireDefault(_getOffsetDistanceInPx);
 
@@ -1832,7 +1840,7 @@ exports.default = mountPopper;
 
 var _globals = __webpack_require__(0);
 
-var _followCursorHandler = __webpack_require__(10);
+var _followCursorHandler = __webpack_require__(9);
 
 var _followCursorHandler2 = _interopRequireDefault(_followCursorHandler);
 
@@ -2016,7 +2024,7 @@ var _noop = __webpack_require__(36);
 
 var _noop2 = _interopRequireDefault(_noop);
 
-var _followCursorHandler = __webpack_require__(10);
+var _followCursorHandler = __webpack_require__(9);
 
 var _followCursorHandler2 = _interopRequireDefault(_followCursorHandler);
 
@@ -2149,6 +2157,8 @@ var Tippy = function () {
       var data = (0, _find2.default)(this.store, function (data) {
         return data.popper === popper;
       });
+      if (!data) return;
+
       var newSettings = _extends({}, data.settings, _defineProperty({}, name, value));
       data.settings = newSettings;
     }
@@ -2166,6 +2176,7 @@ var Tippy = function () {
       var data = (0, _find2.default)(this.store, function (data) {
         return data.popper === popper;
       });
+      if (!data) return;
 
       var _data$settings = data.settings,
           useContext = _data$settings.useContext,
@@ -2399,6 +2410,7 @@ var Tippy = function () {
       var data = (0, _find2.default)(this.store, function (data) {
         return data.popper === popper;
       });
+      if (!data) return;
 
       var _getInnerElements3 = (0, _getInnerElements5.default)(popper),
           content = _getInnerElements3.content;
@@ -2433,6 +2445,7 @@ var Tippy = function () {
       var data = (0, _find2.default)(this.store, function (data) {
         return data.popper === popper;
       });
+      if (!data) return;
 
       var el = data.el,
           popperInstance = data.popperInstance,
@@ -2533,7 +2546,7 @@ var _prefix = __webpack_require__(1);
 
 var _prefix2 = _interopRequireDefault(_prefix);
 
-var _matches = __webpack_require__(8);
+var _matches = __webpack_require__(11);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 

@@ -52,14 +52,16 @@ export default function bindEventListeners() {
 
     if (popper) {
       const ref = find(Store, ref => ref.popper === popper)
-      if (!ref) return
+      if (!ref) return;
+
       const { settings: { interactive } } = ref
       if (interactive) return
     }
 
     if (el) {
       const ref = find(Store, ref => ref.el === el)
-      if (!ref) return
+      if (!ref) return;
+
       const {
         settings: {
           hideOnClick,
