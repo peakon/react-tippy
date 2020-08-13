@@ -50,6 +50,7 @@
     "start": "react-scripts start"
   },
   "dependencies": {
+    "lodash": "^4.17.19",
     "popper.js": "^1.11.1"
   }
 }

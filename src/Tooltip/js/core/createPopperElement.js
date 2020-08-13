@@ -1,3 +1,4 @@
+import _ from 'lodash';
 import getCorePlacement from '../utils/getCorePlacement'
 import getOffsetDistanceInPx from '../utils/getOffsetDistanceInPx'
 
