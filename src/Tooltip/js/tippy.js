@@ -196,7 +196,7 @@ class Tippy {
     if (dynamicTitle) {
       const title = el.getAttribute('title')
       if (title) {
-        content.innerHTML = title
+        content.innerHTML = _.escape(title)
         removeTitle(el)
       }
     }
@@ -368,7 +368,7 @@ class Tippy {
 
     content.innerHTML = html
       ? document.getElementById(html.replace('#', '')).innerHTML
-      : el.getAttribute('title') || el.getAttribute('data-original-title')
+      : _.escape(el.getAttribute('title') || el.getAttribute('data-original-title'))
 
     if (!html) removeTitle(el)
   }
