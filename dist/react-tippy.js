@@ -1146,7 +1146,7 @@ function createPopperElement(id, title, settings) {
     interactive && popper.setAttribute('tabindex', '-1');
     tooltip.setAttribute('data-template-id', templateId);
   } else {
-    content.innerHTML = title;
+    content.innerHTML = _.escape(title);
   }
 
   // Init distance. Further updates are made in the popper instance's `onUpdate()` method
@@ -2243,7 +2243,7 @@ var Tippy = function () {
       if (dynamicTitle) {
         var title = el.getAttribute('title');
         if (title) {
-          content.innerHTML = title;
+          content.innerHTML = _.escape(title);
           (0, _removeTitle2.default)(el);
         }
       }
@@ -2424,7 +2424,7 @@ var Tippy = function () {
         return;
       }
 
-      content.innerHTML = html ? document.getElementById(html.replace('#', '')).innerHTML : el.getAttribute('title') || el.getAttribute('data-original-title');
+      content.innerHTML = html ? document.getElementById(html.replace('#', '')).innerHTML : _.escape(el.getAttribute('title') || el.getAttribute('data-original-title'));
 
       if (!html) (0, _removeTitle2.default)(el);
     }
